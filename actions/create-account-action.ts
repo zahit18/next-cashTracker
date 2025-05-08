@@ -2,7 +2,12 @@
 
 import { RegisterSchema } from "@/src/schemas"
 
-export async function register(formData: FormData) {
+
+type ActionStateType = {
+    errors: string[]
+}
+
+export async function register(prevState: ActionStateType, formData: FormData) {
 
     const registerData = {
         name: formData.get('name'),
@@ -13,11 +18,13 @@ export async function register(formData: FormData) {
 
     // validat
     const register = RegisterSchema.safeParse(registerData)
-    const errors = register.error?.errors.map(error => error.message)
-    console.log(register)
-    console.log(errors)
 
-    if(!register.success) return
+    if (!register.success) {
+        const errors = register.error.errors.map(error => error.message)
+        return {
+            errors
+        }
+    }
     // if (!register.success) {
     //     throw new Error(register.error.errors.map(e => e.message).join(', '))
     // }
@@ -39,4 +46,8 @@ export async function register(formData: FormData) {
     const json = await req.json()
 
     console.log(json)
+
+    return {
+        errors: []
+    }
 }
