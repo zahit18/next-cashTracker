@@ -1,10 +1,30 @@
 "use client"
 
+import { authenticate, LoginActionState } from "@/actions/authenticate-user-action"
+import { useEffect } from "react"
+import { useFormState } from "react-dom"
+import { toast } from "react-toastify"
+
+const initialState: LoginActionState = {
+    errors: []
+}
+
 export default function LoginForm() {
+
+    const [state, dispatch] = useFormState(authenticate, initialState)
+
+    useEffect(() => {
+        if (state.errors) {
+            state.errors.forEach(error => {
+                toast.error(error)
+            })
+        }
+    }, [state])
 
     return (
         <>
             <form
+                action={dispatch}
                 className="mt-14 space-y-5"
                 noValidate
             >
