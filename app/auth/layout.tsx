@@ -1,3 +1,4 @@
+import { ToastContainer } from "react-toastify";
 import Logo from "../components/ui/Logo";
 
 export default function AuthLayout({
@@ -23,6 +24,8 @@ export default function AuthLayout({
                 </div>
 
             </div>
+
+            <ToastContainer />
         </>
     );
 }
