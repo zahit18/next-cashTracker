@@ -31,6 +31,12 @@ export const ErrorResponseSchema = z.object({
 export const TokenSchema = z.string({ message: 'Token no valido' })
     .length(6, { message: 'Token no valido' })
 
+export const ForgotPasswordSchema = z.object({
+    email: z.string()
+        .min(1, { message: 'El Email es Obligatorio' })
+        .email({ message: 'Email no válido' }),
+})
+
 export const UserSchema = z.object({
     id: z.number(),
     name: z.string(),
