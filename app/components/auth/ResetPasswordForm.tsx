@@ -1,10 +1,20 @@
+import { ResetPassowrdState, resetPassword } from "@/actions/reset-password-action"
+import { useFormState } from "react-dom"
+
+const initialValues: ResetPassowrdState = {
+    errors: [],
+    success: ''
+}
 
 export default function ResetPasswordForm() {
+
+    const [state, dispatch] = useFormState(resetPassword, initialValues)
 
     return (
         <form
             className=" mt-14 space-y-5"
             noValidate
+            action={dispatch}
         >
             <div className="flex flex-col gap-5">
                 <label
