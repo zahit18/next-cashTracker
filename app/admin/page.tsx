@@ -3,6 +3,7 @@ import { BudgetsAPIResponseSchema } from "@/src/schemas";
 import { formatCurrency, formatDate } from "@/src/utils";
 import { Metadata } from "next";
 import Link from "next/link";
+import BudgetMenu from "../components/budgets/BudgetMenu";
 
 export const metadata: Metadata = {
     title: 'CahsTracker - Panel de Administracion',
@@ -68,7 +69,9 @@ export default async function AdminPage() {
                                 </div>
                             </div>
                             <div className="flex shrink-0 items-center gap-x-6">
-                                {/* Aquí irían las acciones */}
+                                <BudgetMenu
+                                    budgetId={budget.id}
+                                />
                             </div>
                         </li>
                     ))}
