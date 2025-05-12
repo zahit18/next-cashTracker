@@ -1,4 +1,10 @@
+import { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+    title: 'CahsTracker - Panel de Administracion',
+    description: 'CashTracker - Panel de Administracion'
+}
 
 export default async function AdminPage() {
 
@@ -13,7 +19,7 @@ export default async function AdminPage() {
                     </p>
                 </div>
                 <Link
-                    href={'/admin/budget/new'}
+                    href={'/admin/budgets/new'}
                     className='bg-amber-500 p-2 rounded-lg text-white font-bold w-full md:w-auto text-center'
                 >
                     Crear Presupuesto
