@@ -1,10 +1,10 @@
 import "server-only"
 import { redirect } from "next/navigation"
-import { cookies } from "next/headers"
 import { UserSchema } from "../schemas"
+import getToken from "./token"
 
 export const verifySession = async () => {
-    const token = cookies().get('CASHTRACKER_TOKEN')?.value
+    const token = getToken()
     if(!token) {
         redirect('/auth/login')
     }
