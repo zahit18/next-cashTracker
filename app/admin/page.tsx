@@ -1,5 +1,6 @@
 import getToken from "@/src/auth/token";
 import { BudgetsAPIResponseSchema } from "@/src/schemas";
+import { formatCurrency, formatDate } from "@/src/utils";
 import { Metadata } from "next";
 import Link from "next/link";
 
@@ -24,7 +25,7 @@ async function getUserBudgets() {
 
 export default async function AdminPage() {
 
-    await getUserBudgets()
+    const budgets = await getUserBudgets()
 
     return (
         <>
@@ -42,6 +43,45 @@ export default async function AdminPage() {
                     Crear Presupuesto
                 </Link>
             </div>
+
+            {budgets.length ? (
+                <ul role="list" className="divide-y divide-gray-300 border shadow-lg mt-10">
+                    {budgets.map((budget) => (
+                        <li key={budget.id} className="flex justify-between gap-x-6 p-5">
+                            <div className="flex min-w-0 gap-x-4">
+                                <div className="min-w-0 flex-auto space-y-2">
+                                    <p className="text-sm font-semibold leading-6 text-gray-900">
+                                        <Link
+                                            href={`/admin/budget/${budget.id}`}
+                                            className="cursor-pointer hover:underline text-2xl font-bold"
+                                        >
+                                            {budget.name}
+                                        </Link>
+                                    </p>
+                                    <p className="text-xl font-bold text-amber-500">
+                                        {formatCurrency(+budget.amount)}
+                                    </p>
+                                    <p className='text-gray-500 text-sm'>
+                                        Ultima actualizacion: {''}
+                                        <span className="font-bold">{formatDate(budget.updatedAt)}</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="flex shrink-0 items-center gap-x-6">
+                                {/* Aquí irían las acciones */}
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+            ) : (
+                <p className="mt-10">
+                    No hay presupuestos aun {''}
+                    <Link
+                        href={'/admin/budgets/new'}
+                        className="text-purple-950 font-bold"
+                    > Comienza creando uno</Link>
+                </p>
+            )}
         </>
     )
 }
