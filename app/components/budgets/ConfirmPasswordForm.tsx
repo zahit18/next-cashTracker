@@ -1,16 +1,37 @@
 import { useRouter, usePathname, useSearchParams } from "next/navigation"
 import { DialogTitle } from "@headlessui/react"
+import { useFormState } from "react-dom"
+import { deleteBudget, DeleteBudgetState } from "@/actions/delete-budget-action"
+import ErrorMessage from "../ui/ErrorMessage"
+import { useEffect } from "react"
+import { toast } from "react-toastify"
+
+const initailState: DeleteBudgetState = {
+    errors: [],
+    success: ''
+}
 
 export default function ConfirmPasswordForm() {
     const pathname = usePathname()
     const router = useRouter()
     const searchParams = useSearchParams()
+    const budgetId = +searchParams.get('deleteBudgetId')!
+
+    const deleteBudgetWithPassword = deleteBudget.bind(null, budgetId)
+    const [state, dispatch] = useFormState(deleteBudgetWithPassword, initailState)
 
     const closeModal = () => {
         const hideModal = new URLSearchParams(searchParams.toString())
         hideModal.delete('deleteBudgetId')
         router.replace(`${pathname}?${hideModal}`)
     }
+
+    useEffect(() => {
+        if(state.success) {
+            toast.success(state.success)
+            closeModal()
+        }
+    }, [state])
 
     return (
         <>
@@ -24,9 +45,12 @@ export default function ConfirmPasswordForm() {
                 <span className="text-amber-500">eliminar el presupuesto {''}</span>
             </p>
             <p className='text-gray-600 text-sm'>(Un presupuesto eliminado y sus gastos no se pueden recuperar)</p>
+
+            {state.errors.map(error => <ErrorMessage>{error}</ErrorMessage>)}
             <form
                 className=" mt-14 space-y-5"
                 noValidate
+                action={dispatch}
             >
                 <div className="flex flex-col gap-5">
                     <label
