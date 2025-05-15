@@ -1,8 +1,10 @@
 import EditBudgetForm from "@/app/components/budgets/EditBudgetForm"
 import getToken from "@/src/auth/token"
 import { BudgetAPIResponseSchema } from "@/src/schemas"
+import { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import { title } from "process"
 
 const getBudget = async (budgetId: string) => {
     const token = getToken()
@@ -10,6 +12,9 @@ const getBudget = async (budgetId: string) => {
     const req = await fetch(url, {
         headers: {
             'Authorization': `Bearer ${token}`
+        },
+        next: {
+            tags: ['all-tags']
         }
     })
 
@@ -21,6 +26,14 @@ const getBudget = async (budgetId: string) => {
 
     const budget = BudgetAPIResponseSchema.parse(json)
     return budget
+}
+
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+    const budget = await getBudget(params.id)
+    return {
+        title: `CashTracker - ${budget.name}`,
+        description: `CashTracker - ${budget.name}`
+    }
 }
 
 export default async function EditBudgetPage({ params }: { params: { id: string } }) {
@@ -45,7 +58,7 @@ export default async function EditBudgetPage({ params }: { params: { id: string 
                 </Link>
             </div>
             <div className='p-10 mt-10  shadow-lg border '>
-                <EditBudgetForm 
+                <EditBudgetForm
                     budget={budget}
                 />
             </div>
