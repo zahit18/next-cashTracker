@@ -1,7 +1,22 @@
 import { DialogTitle } from "@headlessui/react";
 import ExpenseForm from "./ExpenseForm";
+import { useEffect, useState } from "react";
+import { useParams, useSearchParams } from "next/navigation";
+import { DraftExpense } from "@/src/schemas";
 
 export default function EditExpenseForm({ closeModal }: { closeModal: () => void }) {
+
+  const [expense, setExpense] = useState<DraftExpense>()
+  const { id: budgetId } = useParams()
+  const searchParams = useSearchParams()
+  const expenseId = searchParams.get('editExpenseId')
+
+  useEffect(() => {
+    const url = `${process.env.NEXT_PUBLIC_URL}/api/budgets/${budgetId}/expenses/${expenseId}`
+    fetch(url)
+      .then(res => res.json())
+      .then(data => setExpense(data))
+  }, [])
 
   return (
     <>
@@ -19,7 +34,9 @@ export default function EditExpenseForm({ closeModal }: { closeModal: () => void
         noValidate
       >
 
-        <ExpenseForm />
+        <ExpenseForm
+          expense={expense}
+        />
 
         <input
           type="submit"
