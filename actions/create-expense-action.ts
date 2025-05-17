@@ -2,6 +2,7 @@
 
 import getToken from "@/src/auth/token"
 import { DraftExpenseSchema, ErrorResponseSchema, SuccessSchema } from "@/src/schemas"
+import { revalidatePath } from "next/cache"
 
 export type CreateExpenseState = {
     errors: string[],
@@ -48,8 +49,7 @@ export default async function createExpense(budgetId: number, prevState: CreateE
     }
 
     const success = SuccessSchema.parse(json)
-    console.log(success)
-
+    revalidatePath(`/admin/budgets/${budgetId}`)
 
     return {
         errors: [],
