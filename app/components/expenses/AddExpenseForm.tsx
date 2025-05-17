@@ -1,7 +1,29 @@
 import { DialogTitle } from "@headlessui/react";
 import ExpenseForm from "./ExpenseForm";
+import { useFormState } from "react-dom";
+import createExpense, { CreateExpenseState } from "@/actions/create-expense-action";
+import { useParams } from "next/navigation";
+import ErrorMessage from "../ui/ErrorMessage";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 
-export default function AddExpenseForm() {
+const initialState: CreateExpenseState = {
+    errors: [],
+    success: ""
+}
+
+export default function AddExpenseForm({ closeModal }: { closeModal: () => void }) {
+    const { id } = useParams()
+
+    const createExpenseWithBudgetId = createExpense.bind(null, +id)
+    const [state, dispatch] = useFormState(createExpenseWithBudgetId, initialState)
+
+    useEffect(() => {
+        if (state.success) {
+            toast.success(state.success)
+            closeModal()
+        }
+    }, [state])
     return (
         <>
             <DialogTitle
@@ -14,9 +36,11 @@ export default function AddExpenseForm() {
             <p className="text-xl font-bold">Llena el formulario y crea un {''}
                 <span className="text-amber-500">gasto</span>
             </p>
+            {state.errors.map(error => <ErrorMessage key={error}>{error}</ErrorMessage>)}
             <form
                 className="bg-gray-100 shadow-lg rounded-lg p-10 mt-10 border"
                 noValidate
+                action={dispatch}
             >
                 <ExpenseForm />
                 <input

@@ -62,6 +62,11 @@ export const DraftBudgetSchema = z.object({
 
 export const PasswordValidationSchema = z.string().min(1, { message: 'Password no valido' })
 
+export const DraftExpenseSchema = z.object({
+    name: z.string().min(1, { message: 'El nombre del gasto es obigatorio' }),
+    amount: z.coerce.number().min(1, { message: 'Cantidad no valida' })
+})
+
 export const BudgetAPIResponseSchema = z.object({
     id: z.number(),
     name: z.string(),
