@@ -1,3 +1,4 @@
+import ProgressBar from "@/app/components/budgets/ProgressBar"
 import AddExpenseButton from "@/app/components/expenses/AddExpenseButton"
 import ExpenseMenu from "@/app/components/expenses/ExpenseMenu"
 import Amount from "@/app/components/ui/Amount"
@@ -22,6 +23,8 @@ export default async function BudgetDetailsPage({ params }: { params: { id: stri
 
     const totalAvailable = +budget.amount - totalSpent;
 
+    const percentage = +((totalSpent / +budget.amount) * 100).toFixed(2)
+
     return (
         <>
             <div className='flex justify-between items-center'>
@@ -36,7 +39,11 @@ export default async function BudgetDetailsPage({ params }: { params: { id: stri
                 <>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 mt-10">
-                        <div>Grafica aqui</div>
+
+                        <ProgressBar
+                            percentage={percentage}
+                        />
+
                         <div className="flex flex-col justify-center items-center md:items-start gap-5">
                             <Amount label={"Presupuesto"} amount={+budget.amount} />
                             <Amount label={"Disponible"} amount={totalAvailable} />
