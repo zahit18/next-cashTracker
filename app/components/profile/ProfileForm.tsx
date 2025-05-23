@@ -1,12 +1,34 @@
 "use client"
 
+import { updateAccount, UpdateAccountState } from "@/actions/update-account-action"
+import { useFormState } from "react-dom"
+import ErrorMessage from "../ui/ErrorMessage"
+import { useEffect } from "react"
+import { toast } from "react-toastify"
+
+const initialState: UpdateAccountState = {
+  errors: [],
+  success: ""
+}
+
 export default function ProfileForm() {
+
+  const [state, dispatch] = useFormState(updateAccount, initialState)
+
+  useEffect(() => {
+    if (state.success) {
+      toast.success(state.success)
+    }
+  }, [state])
+
   return (
     <>
       <form
         className=" mt-14 space-y-5"
         noValidate
+        action={dispatch}
       >
+        {state.errors.map(error => <ErrorMessage>{error}</ErrorMessage>)}
         <div className="flex flex-col gap-5">
           <label
             className="font-bold text-2xl"

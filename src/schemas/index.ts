@@ -22,6 +22,14 @@ export const LoginSchema = z.object({
         .min(1, { message: 'El Password no puede ir vacio' })
 })
 
+export const UpdateAccountSchema = z.object({
+    email: z.string()
+        .min(1, { message: 'El Email es Obligatorio' })
+        .email({ message: 'Email no válido' }),
+    name: z.string()
+        .min(1, { message: 'Tu nombre no puede ir vacio' }),
+})
+
 export const SuccessSchema = z.string()
 
 export const ErrorResponseSchema = z.object({
