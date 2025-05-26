@@ -48,7 +48,7 @@ export async function updateAccount(prevState: UpdateAccountState, formData: For
 
     const success = SuccessSchema.parse(json)
 
-    revalidatePath('')
+    revalidatePath('/admin/profile/settings')
 
     return {
         errors: [],
